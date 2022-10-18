@@ -3,7 +3,7 @@ class TicTacToe:
     player = 1
     player_positions = {}
 
-    def output_(self, player_positions):
+    def output(self, player_positions):
         for x in range(3):
             if x > 0:
                 print('----------')
@@ -17,23 +17,58 @@ class TicTacToe:
                 else:
                     print(' ', end=' | ')
 
+    def get_coordinate_count(self, player, x, y):
+        if x not in player['x']:
+            player['x'][x] = 1
+        else:
+            player['x'][x] += 1
+
+        if y not in player['y']:
+            player['y'][y] = 1
+        else:
+            player['y'][y] += 1
+
+    def winning_status(self, player_position):
+
+        player_1 = {'x': {}, 'y': {}}
+        player_2 = {'x': {}, 'y': {}}
+
+        for x, y in player_position:
+            if player_position[(x, y)]['value'] == '+':
+                self.get_coordinate_count(player_1, x, y)
+            else:
+                self.get_coordinate_count(player_2, x, y)
+
+        if 3 in player_1['x'].values() or 3 in player_1['y'].values() or \
+            ({0, 1, 2}.issubset(set(player_1['x'].keys())) and {0, 1, 2}.issubset(set(player_1['y'].keys()))):
+            return 'Player 1', True
+        elif 3 in player_2['x'].values() or 3 in player_2['y'].values() or \
+            ({0, 1, 2}.issubset(set(player_2['x'].keys())) and {0, 1, 2}.issubset(set(player_2['y'].keys()))):
+            return 'Player 2', True
+        else:
+            return None, False
 
     def update_table(self):
         positions = {1: (0,0), 2: (0,1), 3: (0,2), 4: (1,0), 5: (1,1), 6: (1,2), 7: (2,0), 8: (2,1), 9: (2,2)}
         count = 0
+        self.output({(None, None)})
         while count <= 8:
             position = input('Choose a position among 1 - (0,0), 2 - (0,1), 3 - (0,2), 4 - (1,0), 5 - (1,1), 6 - (1,2), 7 - (2,0), 8 - (2,1), 9 - (2,2): ')
             curr_position = positions[int(position)]
 
             if self.player == 1:
-                self.player_positions[curr_position] = {'value': '+', 'count': count}
+                self.player_positions[curr_position] = {'value': '+', 'move': count}
                 self.player = 2
             else:
-                self.player_positions[curr_position] = {'value': 'o', 'count': count}
+                self.player_positions[curr_position] = {'value': 'o', 'move': count}
                 self.player = 1
-            self.output_(self.player_positions)
+            self.output(self.player_positions)
+            player, winning_status = self.winning_status(self.player_positions)
+            if winning_status:
+                print(f'{player} wins')
+                break
             count += 1
 
 
-tick_tac_toe = TicTacToe()
-tick_tac_toe.update_table()
+tic_tac_toe = TicTacToe()
+tic_tac_toe.update_table()
