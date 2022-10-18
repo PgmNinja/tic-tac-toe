@@ -28,7 +28,6 @@ class TicTacToe:
             player['y'][y] += 1
 
     def winning_status(self, player_position):
-
         player_1 = {'x': {}, 'y': {}}
         player_2 = {'x': {}, 'y': {}}
 
