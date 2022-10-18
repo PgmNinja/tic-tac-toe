@@ -1,5 +1,4 @@
 class TicTacToe:
-
     player = 1
     player_positions = {}
 
@@ -29,7 +28,6 @@ class TicTacToe:
             player['y'][y] += 1
 
     def winning_status(self, player_position):
-
         player_1 = {'x': {}, 'y': {}}
         player_2 = {'x': {}, 'y': {}}
 
@@ -53,21 +51,30 @@ class TicTacToe:
         count = 0
         self.output({(None, None)})
         while count <= 8:
-            position = input('Choose a position among 1 - (0,0), 2 - (0,1), 3 - (0,2), 4 - (1,0), 5 - (1,1), 6 - (1,2), 7 - (2,0), 8 - (2,1), 9 - (2,2): ')
-            curr_position = positions[int(position)]
+            try:
+                position = int(input('Choose a position among 1 - \
+                    (0,0), 2 - (0,1), 3 - (0,2), 4 - (1,0), 5 - (1,1), 6 - (1,2), 7 - (2,0), 8 - (2,1), 9 - (2,2): '))
+            except Exception as e:
+                position = 0
 
-            if self.player == 1:
-                self.player_positions[curr_position] = {'value': '+', 'move': count}
-                self.player = 2
+            if position not in list(range(1, 10)):
+                print('Please enter a valid number')
+                return False
             else:
-                self.player_positions[curr_position] = {'value': 'o', 'move': count}
-                self.player = 1
-            self.output(self.player_positions)
-            player, winning_status = self.winning_status(self.player_positions)
-            if winning_status:
-                print(f'{player} wins')
-                break
-            count += 1
+                curr_position = positions[position]
+
+                if self.player == 1:
+                    self.player_positions[curr_position] = {'value': '+', 'move': count}
+                    self.player = 2
+                else:
+                    self.player_positions[curr_position] = {'value': 'o', 'move': count}
+                    self.player = 1
+                self.output(self.player_positions)
+                player, winning_status = self.winning_status(self.player_positions)
+                if winning_status:
+                    print(f'{player} wins')
+                    break
+                count += 1
 
 
 tic_tac_toe = TicTacToe()
