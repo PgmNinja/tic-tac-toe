@@ -8,10 +8,11 @@ class TicTacToe:
         self.size = size
 
     def output(self, player_positions):
-        for x in range(3):
+        print('player postions: ', player_positions)
+        for x in range(self.size):
             if x > 0:
                 print('----------')
-            for y in range(3):
+            for y in range(self.size):
                 if (x, y) in player_positions and ((x,y) == (0,2) or (x,y) == (1,2) or (x,y) == (2,2)):
                     print(player_positions[(x,y)]['value'])
                 elif (x,y) in player_positions:
@@ -70,7 +71,6 @@ class TicTacToe:
 
             if position not in list(range(1, 10)):
                 print('Please enter a valid number')
-                return False
             else:
                 curr_position = positions[position]
 
@@ -103,14 +103,17 @@ class TicTacToe:
             if self.player == 2:
                 position = self.input_loop()
                 if position not in list(range(1, 10)):
-                    print('Please enter a valid number')
-                    return False
+                    print('Please enter a valid number!')
+                    continue
                 curr_position = positions[position]
-                self.player_positions[curr_position] = {'value': '+', 'move': count}
+                if curr_position in self.player_positions:
+                    print('This position is already occupied!')
+                    continue
+                self.player_positions[curr_position] = {'value': '+'}
                 self.player = 1
             else:
-                next_position = get_next_move(curr_position, count)
-                self.player_positions[next_position] = {'value': 'o', 'move': count}
+                next_position = get_next_move(self.player_positions)
+                self.player_positions[next_position] = {'value': 'o'}
                 self.player = 2
             self.output(self.player_positions)
             print()
