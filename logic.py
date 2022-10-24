@@ -4,6 +4,9 @@ class TicTacToe:
     player = 1
     player_positions = {}
 
+    def __init__(self, size=3):
+        self.size = size
+
     def output(self, player_positions):
         for x in range(3):
             if x > 0:
@@ -29,20 +32,28 @@ class TicTacToe:
         else:
             player['y'][y] += 1
 
+        if x == y:
+            player['z']['forward'] += 1
+        if x + y == self.size - 1:
+            player['z']['backward'] += 1
+
+
     def winning_status(self, player_position):
-        player_1 = {'x': {}, 'y': {}}
-        player_2 = {'x': {}, 'y': {}}
+        player_1 = {'x': {}, 'y': {}, 'z' : {'backward': 0, 'forward': 0}}
+        player_2 = {'x': {}, 'y': {}, 'z' : {'backward': 0, 'forward': 0}}
 
         for x, y in player_position:
-            if player_position[(x, y)]['value'] == '+':
+            if player_position[(x, y)]['value'] == 'o':
                 self.get_coordinate_count(player_1, x, y)
             else:
                 self.get_coordinate_count(player_2, x, y)
 
-        if 3 in player_1['x'].values() or 3 in player_1['y'].values():
-            return 'Player 2', True
-        elif 3 in player_2['x'].values() or 3 in player_2['y'].values():
+        if self.size in player_1['x'].values() or self.size in player_1['y'].values() or \
+            self.size in player_1['z'].values():
             return 'Player 1', True
+        elif self.size in player_2['x'].values() or self.size in player_2['y'].values() or \
+            self.size in player_2['z'].values():
+            return 'Player 2', True
         else:
             return None, False
 
